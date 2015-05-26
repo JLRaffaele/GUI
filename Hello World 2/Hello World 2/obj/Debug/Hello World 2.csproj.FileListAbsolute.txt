@@ -1,2 +1,0 @@
-C:\Users\Skyler\AppData\Local\Temporary Projects\Hello World 2\bin\Debug\Hello World 2.exe.config
-W:\Documents\School Work\### Current term ###\CST 238\### Repos\GUI Group Project\Hello World 2\Hello World 2\bin\Debug\Hello World 2.exe.config
