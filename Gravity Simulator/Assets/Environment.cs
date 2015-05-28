@@ -35,18 +35,15 @@ public class Environment : MonoBehaviour {
 			// The force of gravity these objects enact on each other.
 			float Fgrav = (body1.mass * body2.mass) / Mathf.Pow(Vector2.Distance(body1.position, body2.position), 2);
 
-			// The angle of the force to apply
-			float angle = Vector2.Angle(body1.position, body2.position);
-
 			// Vector of force applied.
-			Vector2 forceVector = new Vector2(Fgrav * Mathf.Cos(angle), Fgrav * Mathf.Sin(angle));
+			Vector2 forceVector = (body2.position - body1.position) * Fgrav;
 
 
 			Debug.Log(forceVector.ToString());
 
 			// Apply the force.
-			body1.AddForce(forceVector);
-			body2.AddForce(forceVector * -1);
+			body1.AddForce(forceVector * Time.deltaTime);
+			body2.AddForce(forceVector * Time.deltaTime * -1);
 		}
 		else throw new System.ArgumentException("null parameter.");
 	}

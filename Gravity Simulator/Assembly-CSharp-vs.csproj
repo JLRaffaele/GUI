@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Environment.cs" />
+     <Compile Include="Assets\SolarSystemDataTypes.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>G:/Programs/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
