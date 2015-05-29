@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using Assets;
 // Singleton class for accessing "global" variables and methods.
 public class Environment : MonoBehaviour {
 
@@ -30,6 +30,8 @@ public class Environment : MonoBehaviour {
 	// Applies the force of gravity to the objects passed in.
 	public void ApplyGravity(Rigidbody2D body1, Rigidbody2D body2)
 	{
+		Int128 test = (Int128)40000000000000000000000000000;
+
 		if (body1 != null && body2 != null)
 		{
 			// The force of gravity these objects enact on each other.

@@ -17,10 +17,10 @@ namespace Assets
 			_mass = massInSM;
 		}
 
-		public long GetMassAsKG()
-		{
-			return _mass * 1989000000000000000000000000000
-		}
+		//public long GetMassAsKG()
+		//{
+		//	return _mass * 1989000000000000000000000000000;
+		//}
 	}
 	// This is the radius of the sun. (R)adius(S)un.
 	class RS
@@ -63,5 +63,50 @@ namespace Assets
 		{
 			_radius = meters / 695800000;
 		}
+	}
+
+	// This is an int for dealing with really big numbers. Like the mass of the sun.
+	class Int128
+	{
+		public Int128()
+		{
+			m_high_bits = 0;
+			m_low_bits = 0;
+		}
+
+
+		// Allows conversions of longs to Int128's. This cannot be reversed.
+		public static implicit operator Int128(long conversion)
+		{
+			Int128 cValue = new Int128();
+			Int64 mask = 1 << 63;
+			Int64 upperBits = conversion & mask;
+			UInt64 lowerBits = (ulong)(Math.Abs(conversion));
+
+			cValue.m_low_bits = lowerBits;
+			cValue.m_high_bits = upperBits;
+
+			return cValue;
+		}
+
+		// Allows the addition of two Int128's
+		public Int128 operator+ (Int128 rhs)
+		{
+			Int128 sum = 0;
+
+			sum.m_high_bits = this.m_high_bits + rhs.m_high_bits;
+			sum.m_low_bits = this.m_low_bits + rhs.m_low_bits;
+
+			// If a bit was lost to overflow..
+			if (sum.m_low_bits < this.m_low_bits)
+				++sum.m_high_bits;
+
+			return sum;
+		}
+
+		// The upper bits of the number.
+		Int64  m_high_bits;
+		// The lower bits of the number.
+		UInt64 m_low_bits;
 	}
 }
