@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Assets;
 // Singleton class for accessing "global" variables and methods.
 public class Environment : MonoBehaviour {
 
 	public static Environment env;
 
+	// The multiplier at which time flows.
+	public int timeWarp = 1;
 
-	// The rate at which distance is converted from real world meters to unity sizes.
-	// Example: Planet is 12756000m, unity representation is 20m. Rate is  actual / rep = 637800.
-	private float _distanceConversionRate = 1;
 
-	// Property for distanceConversionRate.
-	public float DistanceConversionRate
+	public int TimeWarp
 	{
-		get { return _distanceConversionRate;  }
-		set { _distanceConversionRate = value; }
+		get { return timeWarp; }
+		set 
+		{ 
+			Time.timeScale = value;
+			timeWarp = value;
+		}
 	}
+
 
 	// A list meant to contain every Rigid body attached to each object on the scene.
 	private System.Collections.Generic.List<GameObject> _allBodies = new System.Collections.Generic.List<GameObject>();
@@ -38,9 +40,6 @@ public class Environment : MonoBehaviour {
 			// Vector of force applied.
 			Vector2 forceVector = (body2.position - body1.position) * Fgrav;
 
-
-			Debug.Log(forceVector.ToString());
-
 			// Apply the force.
 			body1.AddForce(forceVector * Time.deltaTime);
 			body2.AddForce(forceVector * Time.deltaTime * -1);
@@ -51,13 +50,16 @@ public class Environment : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+		// adjust time.
+		Time.timeScale = TimeWarp;
+
 		// Add each already existent rigid body to the list.
 		foreach (GameObject body in GameObject.FindGameObjectsWithTag("Body"))
 			AllBodies.Add(body);
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
 	{
 		// Apply gravity between each and every combination of objects.
 		for (int i = 0; i < AllBodies.Count - 1; i++)
