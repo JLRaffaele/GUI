@@ -61,7 +61,7 @@ public class Environment : MonoBehaviour
 
 		// Add planets if add planet was clicked at the clicked location.
         if (UnityEngine.Input.GetMouseButtonDown(0))
-            if (GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet)
+			if (GameObject.Find("Add").GetComponent<AddButtonScript>().addingPlanet)
 				AddPlanet();
 
     }
@@ -114,7 +114,7 @@ public class Environment : MonoBehaviour
                 newPlanet.tag = "Body";
 
                 newPlanet.AddComponent<Rigidbody2D>();
-                newPlanet.GetComponent<Rigidbody2D>().mass = float.Parse(GameObject.Find("SizeInput").GetComponent<InputField>().text;
+                newPlanet.GetComponent<Rigidbody2D>().mass = float.Parse(GameObject.Find("SizeInput").GetComponent<InputField>().text);
                 newPlanet.GetComponent<Rigidbody2D>().drag = 0;
                 newPlanet.GetComponent<Rigidbody2D>().angularDrag = 0;
                 newPlanet.GetComponent<Rigidbody2D>().gravityScale = 0;
@@ -132,9 +132,9 @@ public class Environment : MonoBehaviour
                 newPlanet.transform.position = pos;
 
                 newPlanet.AddComponent<AddVelocity>();
-                addButton.GetComponent<AddPlanet>().addingPlanet = false;
+				addButton.GetComponent<AddButtonScript>().addingPlanet = false;
                 
                 GameObject.Find("Environment").GetComponent<Environment>().AllBodies.Add(newPlanet);
-                GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet = false;
+				GameObject.Find("Add").GetComponent<AddButtonScript>().addingPlanet = false;
 	}
 }
