@@ -11,7 +11,11 @@ public class Environment : MonoBehaviour
 
     // The multiplier at which time flows.
     public int timeWarp = 1;
-    public int numCreated = 1;
+
+	// The number of planets created.
+    private  int numCreated = 0;
+
+	// Material for trail.
     public Material tracerMat;
 
     public int TimeWarp
@@ -79,48 +83,8 @@ public class Environment : MonoBehaviour
 
         if (UnityEngine.Input.GetMouseButtonDown(0))
         {
-            if (GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet)
-            { 
-                numCreated++;
-                string planetName = "Planet" + numCreated;
-                var newPlanet = new GameObject(planetName);
-                // GameObject newPlanet = GameObject.Find(GameObject.Find("Add").GetComponent<AddPlanet>().planetName);
-                GameObject addButton = GameObject.Find("Add");
-
-                var planetsprite = AssetDatabase.LoadAssetAtPath("Assets/Sun.png", typeof(Sprite)) as Sprite;          
-
-
-                newPlanet.AddComponent<SpriteRenderer>();
-                newPlanet.GetComponent<SpriteRenderer>().sprite = planetsprite;
-
-                newPlanet.tag = "Body";
-
-                newPlanet.AddComponent<Rigidbody2D>();
-                newPlanet.GetComponent<Rigidbody2D>().mass = float.Parse(GameObject.Find("SizeInput").GetComponent<InputField>().text);
-                newPlanet.GetComponent<Rigidbody2D>().drag = 0;
-                newPlanet.GetComponent<Rigidbody2D>().angularDrag = 0;
-                newPlanet.GetComponent<Rigidbody2D>().gravityScale = 0;
-
-                newPlanet.AddComponent<TrailRenderer>();
-                newPlanet.GetComponent<TrailRenderer>().startWidth = 0.1F;
-                newPlanet.GetComponent<TrailRenderer>().endWidth = 0.1F;
-                newPlanet.GetComponent<TrailRenderer>().time = float.Parse(GameObject.Find("TrailDurationInput").GetComponent<InputField>().text);
-                newPlanet.GetComponent<TrailRenderer>().material = tracerMat;
-                //tracer color cannot be changed by default through script
-
-                var pos = Input.mousePosition;
-                pos = Camera.main.ScreenToWorldPoint(pos);
-                pos.z = 0;
-                newPlanet.transform.position = pos;
-
-                newPlanet.AddComponent<AddVelocity>();
-                addButton.GetComponent<AddPlanet>().addingPlanet = false;
-                
-                GameObject.Find("Environment").GetComponent<Environment>().AllBodies.Add(newPlanet);
-                GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet = false;
-                
-
-            }
+			if (GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet)
+				CreateNewPlanet();
         }
 
     }
@@ -136,7 +100,46 @@ public class Environment : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    
+	private void CreateNewPlanet()
+	{
+		numCreated++;
+		string planetName = "Planet" + numCreated;
+		var newPlanet = new GameObject(planetName);
+		// GameObject newPlanet = GameObject.Find(GameObject.Find("Add").GetComponent<AddPlanet>().planetName);
+		GameObject addButton = GameObject.Find("Add");
+
+		var planetsprite = AssetDatabase.LoadAssetAtPath("Assets/Sun.png", typeof(Sprite)) as Sprite;
+
+
+		newPlanet.AddComponent<SpriteRenderer>();
+		newPlanet.GetComponent<SpriteRenderer>().sprite = planetsprite;
+
+		newPlanet.tag = "Body";
+
+		newPlanet.AddComponent<Rigidbody2D>();
+		newPlanet.GetComponent<Rigidbody2D>().mass = float.Parse(GameObject.Find("SizeInput").GetComponent<InputField>().text);
+		newPlanet.GetComponent<Rigidbody2D>().drag = 0;
+		newPlanet.GetComponent<Rigidbody2D>().angularDrag = 0;
+		newPlanet.GetComponent<Rigidbody2D>().gravityScale = 0;
+
+		newPlanet.AddComponent<TrailRenderer>();
+		newPlanet.GetComponent<TrailRenderer>().startWidth = 0.1F;
+		newPlanet.GetComponent<TrailRenderer>().endWidth = 0.1F;
+		newPlanet.GetComponent<TrailRenderer>().time = float.Parse(GameObject.Find("TrailDurationInput").GetComponent<InputField>().text);
+		newPlanet.GetComponent<TrailRenderer>().material = tracerMat;
+		//tracer color cannot be changed by default through script
+
+		var pos = Input.mousePosition;
+		pos = Camera.main.ScreenToWorldPoint(pos);
+		pos.z = 0;
+		newPlanet.transform.position = pos;
+
+		newPlanet.AddComponent<AddVelocity>();
+		addButton.GetComponent<AddPlanet>().addingPlanet = false;
+
+		GameObject.Find("Environment").GetComponent<Environment>().AllBodies.Add(newPlanet);
+		GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet = false;
+	}
     
 
 }
