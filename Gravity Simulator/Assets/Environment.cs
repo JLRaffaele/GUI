@@ -6,16 +6,12 @@ using UnityEngine.UI;
 // Singleton class for accessing "global" variables and methods.
 public class Environment : MonoBehaviour
 {
-	#region Variables and properties
-	public static Environment env;
+
+    public static Environment env;
 
     // The multiplier at which time flows.
     public int timeWarp = 1;
-
-	// The number of planets ever created.
-	static int numberOfPlanetsCreated = 0;
-
-	// The type of material to use for the trail.
+    public int numCreated = 1;
     public Material tracerMat;
 
     public int TimeWarp
@@ -37,10 +33,32 @@ public class Environment : MonoBehaviour
         get { return _allBodies; }
         set { _allBodies = value; }
     }
-	# endregion
 
-	#region Update, Start, Awake...
-	// Use this for initialization
+    // Applies the force of gravity to the objects passed in.
+    public void ApplyGravity(Rigidbody2D body1, Rigidbody2D body2)
+    {
+        if (body1 != null && body2 != null)
+        {
+            // The force of gravity these objects enact on each other.
+            float Fgrav = (body1.mass * body2.mass) / Mathf.Pow(Vector2.Distance(body1.position, body2.position), 2);
+
+            // Vector of force applied.
+            Vector2 forceVector = (body2.position - body1.position) * Fgrav;
+
+            // Apply the force.
+            body1.AddForce(forceVector * Time.deltaTime);
+            body2.AddForce(forceVector * Time.deltaTime * -1);
+        }
+        else
+        {
+            if (body1 == null)
+                throw new System.ArgumentException("body 1 is a null parameter.");
+            else
+                throw new System.ArgumentException("body 2 is a null parameter.");
+        }
+    }
+
+    // Use this for initialization
     void Start()
     {
         // adjust time.
@@ -50,8 +68,8 @@ public class Environment : MonoBehaviour
         foreach (GameObject body in GameObject.FindGameObjectsWithTag("Body"))
             AllBodies.Add(body);
     }
-	
-	// Update is called once per frame
+
+    // Update is called once per frame
     void FixedUpdate()
     {
         // Apply gravity between each and every combination of objects.
@@ -59,48 +77,12 @@ public class Environment : MonoBehaviour
             for (int j = i + 1; j < AllBodies.Count; j++)
                 ApplyGravity(AllBodies[i].GetComponent<Rigidbody2D>(), AllBodies[j].GetComponent<Rigidbody2D>());
 
-		// Add planets if add planet was clicked at the clicked location.
         if (UnityEngine.Input.GetMouseButtonDown(0))
+        {
             if (GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet)
-				AddPlanet();
-
-    }
-
-    // Singleton method.
-    void Awake()
-    {
-        if (env != null)
-            GameObject.Destroy(env);
-        else
-            env = this;
-
-        DontDestroyOnLoad(this);
-    }
-#endregion
-
-	// Applies the force of gravity to the objects passed in.
-	private void ApplyGravity(Rigidbody2D body1, Rigidbody2D body2)
-	{
-		if (body1 != null && body2 != null)
-		{
-			// The force of gravity these objects enact on each other.
-			float Fgrav = (body1.mass * body2.mass) / Mathf.Pow(Vector2.Distance(body1.position, body2.position), 2);
-
-			// Vector of force applied.
-			Vector2 forceVector = (body2.position - body1.position) * Fgrav;
-
-			// Apply the force.
-			body1.AddForce(forceVector * Time.deltaTime);
-			body2.AddForce(forceVector * Time.deltaTime * -1);
-		}
-		else
-			throw new System.ArgumentException("Null parameter.");
-	}  
-    
-	private void AddPlanet()
-	{
-				numberOfPlanetsCreated++;
-                string planetName = "Planet" + numberOfPlanetsCreated;
+            { 
+                numCreated++;
+                string planetName = "Planet" + numCreated;
                 var newPlanet = new GameObject(planetName);
                 // GameObject newPlanet = GameObject.Find(GameObject.Find("Add").GetComponent<AddPlanet>().planetName);
                 GameObject addButton = GameObject.Find("Add");
@@ -114,7 +96,7 @@ public class Environment : MonoBehaviour
                 newPlanet.tag = "Body";
 
                 newPlanet.AddComponent<Rigidbody2D>();
-                newPlanet.GetComponent<Rigidbody2D>().mass = float.Parse(GameObject.Find("SizeInput").GetComponent<InputField>().text;
+                newPlanet.GetComponent<Rigidbody2D>().mass = float.Parse(GameObject.Find("SizeInput").GetComponent<InputField>().text);
                 newPlanet.GetComponent<Rigidbody2D>().drag = 0;
                 newPlanet.GetComponent<Rigidbody2D>().angularDrag = 0;
                 newPlanet.GetComponent<Rigidbody2D>().gravityScale = 0;
@@ -136,5 +118,25 @@ public class Environment : MonoBehaviour
                 
                 GameObject.Find("Environment").GetComponent<Environment>().AllBodies.Add(newPlanet);
                 GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet = false;
-	}
+                
+
+            }
+        }
+
+    }
+
+    // Singleton method.
+    void Awake()
+    {
+        if (env != null)
+            GameObject.Destroy(env);
+        else
+            env = this;
+
+        DontDestroyOnLoad(this);
+    }
+
+    
+    
+
 }
