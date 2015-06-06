@@ -6,14 +6,14 @@ using UnityEngine.UI;
 // Singleton class for accessing "global" variables and methods.
 public class Environment : MonoBehaviour
 {
-
-    public static Environment env;
+	#region Varaibles and properties
+	public static Environment env;
 
     // The multiplier at which time flows.
     public int timeWarp = 1;
 
 	// The number of planets created.
-    private  int numCreated = 0;
+    private  int numberOfPlanetsCreated = 0;
 
 	// Material for trail.
     public Material tracerMat;
@@ -28,8 +28,7 @@ public class Environment : MonoBehaviour
         }
     }
 
-
-    // A list meant to contain every Rigid body attached to each object on the scene.
+	// A list meant to contain every Rigid body attached to each object on the scene.
     private System.Collections.Generic.List<GameObject> _allBodies = new System.Collections.Generic.List<GameObject>();
 
     public System.Collections.Generic.List<GameObject> AllBodies
@@ -37,32 +36,10 @@ public class Environment : MonoBehaviour
         get { return _allBodies; }
         set { _allBodies = value; }
     }
+	#endregion
 
-    // Applies the force of gravity to the objects passed in.
-    public void ApplyGravity(Rigidbody2D body1, Rigidbody2D body2)
-    {
-        if (body1 != null && body2 != null)
-        {
-            // The force of gravity these objects enact on each other.
-            float Fgrav = (body1.mass * body2.mass) / Mathf.Pow(Vector2.Distance(body1.position, body2.position), 2);
-
-            // Vector of force applied.
-            Vector2 forceVector = (body2.position - body1.position) * Fgrav;
-
-            // Apply the force.
-            body1.AddForce(forceVector * Time.deltaTime);
-            body2.AddForce(forceVector * Time.deltaTime * -1);
-        }
-        else
-        {
-            if (body1 == null)
-                throw new System.ArgumentException("body 1 is a null parameter.");
-            else
-                throw new System.ArgumentException("body 2 is a null parameter.");
-        }
-    }
-
-    // Use this for initialization
+	#region Start, Update, Awake ect.
+	// Use this for initialization
     void Start()
     {
         // adjust time.
@@ -99,16 +76,35 @@ public class Environment : MonoBehaviour
 
         DontDestroyOnLoad(this);
     }
+	#endregion
 
+	// Applies the force of gravity to the objects passed in.
+	public void ApplyGravity(Rigidbody2D body1, Rigidbody2D body2)
+	{
+		if (body1 != null && body2 != null)
+		{
+			// The force of gravity these objects enact on each other.
+			float Fgrav = (body1.mass * body2.mass) / Mathf.Pow(Vector2.Distance(body1.position, body2.position), 2);
+
+			// Vector of force applied.
+			Vector2 forceVector = (body2.position - body1.position) * Fgrav;
+
+			// Apply the force.
+			body1.AddForce(forceVector * Time.deltaTime);
+			body2.AddForce(forceVector * Time.deltaTime * -1);
+		}
+		else
+			throw new System.ArgumentException("Null parameter.");
+	}
 	private void CreateNewPlanet()
 	{
-		numCreated++;
-		string planetName = "Planet" + numCreated;
-		var newPlanet = new GameObject(planetName);
-		// GameObject newPlanet = GameObject.Find(GameObject.Find("Add").GetComponent<AddPlanet>().planetName);
+		numberOfPlanetsCreated++;
+		string planetName = "Planet" + numberOfPlanetsCreated;
+
+		GameObject newPlanet = new GameObject(planetName);
 		GameObject addButton = GameObject.Find("Add");
 
-		var planetsprite = AssetDatabase.LoadAssetAtPath("Assets/Sun.png", typeof(Sprite)) as Sprite;
+		Sprite planetsprite = AssetDatabase.LoadAssetAtPath("Assets/Images/Sun.png", typeof(Sprite)) as Sprite;
 
 
 		newPlanet.AddComponent<SpriteRenderer>();
@@ -129,16 +125,14 @@ public class Environment : MonoBehaviour
 		newPlanet.GetComponent<TrailRenderer>().material = tracerMat;
 		//tracer color cannot be changed by default through script
 
-		var pos = Input.mousePosition;
+		Vector2 pos = Input.mousePosition;
 		pos = Camera.main.ScreenToWorldPoint(pos);
-		pos.z = 0;
 		newPlanet.transform.position = pos;
 
 		newPlanet.AddComponent<AddVelocity>();
 		addButton.GetComponent<AddPlanet>().addingPlanet = false;
 
-		GameObject.Find("Environment").GetComponent<Environment>().AllBodies.Add(newPlanet);
-		GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet = false;
+		AllBodies.Add(newPlanet);
 	}
     
 
