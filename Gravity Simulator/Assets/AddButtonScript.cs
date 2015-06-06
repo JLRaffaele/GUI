@@ -12,9 +12,8 @@ public class AddButtonScript : MonoBehaviour {
     //public string planetName = "";
 
 	// Use this for initialization
-	void Start () {
-        GameObject.Find("SizeInput").GetComponent<InputField>().text = "1000";
-        GameObject.Find("TrailDurationInput").GetComponent<InputField>().text = "10";
+	void Start ()
+	{
 	}
 
 	public void AddNewPlanet(){
