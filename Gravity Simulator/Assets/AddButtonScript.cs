@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 
-public class AddPlanet : MonoBehaviour {
+public class AddButtonScript : MonoBehaviour {
 
 	public Material tracerMat;
 	//int numCreated = 1;

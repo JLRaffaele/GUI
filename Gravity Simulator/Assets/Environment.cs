@@ -60,7 +60,7 @@ public class Environment : MonoBehaviour
 
         if (UnityEngine.Input.GetMouseButtonDown(0))
         {
-			if (GameObject.Find("Add").GetComponent<AddPlanet>().addingPlanet)
+			if (GameObject.Find("Add").GetComponent<AddButtonScript>().addingPlanet)
 				CreateNewPlanet();
         }
 
@@ -130,7 +130,7 @@ public class Environment : MonoBehaviour
 		newPlanet.transform.position = pos;
 
 		newPlanet.AddComponent<AddVelocity>();
-		addButton.GetComponent<AddPlanet>().addingPlanet = false;
+		addButton.GetComponent<AddButtonScript>().addingPlanet = false;
 
 		AllBodies.Add(newPlanet);
 	}
