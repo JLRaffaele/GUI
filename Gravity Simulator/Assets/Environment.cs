@@ -10,7 +10,7 @@ public class Environment : MonoBehaviour
 	public static Environment env;
 
     // The multiplier at which time flows.
-    public float timeWarp = 1;
+    public int timeWarp = 1;
 
 	// The number of planets created.
     private  int numberOfPlanetsCreated = 0;
@@ -18,7 +18,7 @@ public class Environment : MonoBehaviour
 	// Material for trail.
     public Material tracerMat;
 
-    public float TimeWarp
+    public int TimeWarp
     {
         get { return timeWarp; }
         set
