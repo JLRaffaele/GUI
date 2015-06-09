@@ -9,6 +9,7 @@ public class AddButtonScript : MonoBehaviour {
 	public Material tracerMat;
 	//int numCreated = 1;
     public bool addingPlanet = false;
+	//bool clicked = false;
     //public string planetName = "";
 
 	// Use this for initialization
@@ -18,7 +19,8 @@ public class AddButtonScript : MonoBehaviour {
 
 	public void AddNewPlanet(){
 
-        addingPlanet = !addingPlanet;
+		addingPlanet = true;
+
     }
 	
 

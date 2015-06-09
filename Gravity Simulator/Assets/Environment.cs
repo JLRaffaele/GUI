@@ -62,8 +62,12 @@ public class Environment : MonoBehaviour
         {
 			if (GameObject.Find("TogglePlanetCreationMenuButton").GetComponent<ToggleButton>().objectToToggle.activeSelf)
 				if (GameObject.Find("Add").GetComponent<AddButtonScript>().addingPlanet)
-					CreateNewPlanet();
+					if (!(Input.mousePosition.x >= 1039 && Input.mousePosition.x <= 1252) && !(Input.mousePosition.y >= 436 && Input.mousePosition.y <= 461))
+					    CreateNewPlanet();
+			
         }
+
+
 
     }
 
