@@ -48,6 +48,13 @@ public class Environment : MonoBehaviour
         // Add each already existent rigid body to the list.
         foreach (GameObject body in GameObject.FindGameObjectsWithTag("Body"))
             AllBodies.Add(body);
+
+		float worldScreenHeight = Camera.main.orthographicSize * 2;
+		float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+
+		SpriteRenderer bg = GameObject.Find ("Background").GetComponent<SpriteRenderer> ();
+
+		bg.transform.localScale = new Vector3 (worldScreenWidth / bg.sprite.bounds.size.x, worldScreenHeight / bg.sprite.bounds.size.y, 1);
     }
 
     // Update is called once per frame
