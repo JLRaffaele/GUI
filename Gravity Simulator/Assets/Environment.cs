@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 using UnityEngine.UI;
 
 // Singleton class for accessing "global" variables and methods.
@@ -117,7 +116,7 @@ public class Environment : MonoBehaviour
 		GameObject newPlanet = new GameObject(planetName);
 		GameObject addButton = GameObject.Find("Add");
 
-		Sprite planetsprite = AssetDatabase.LoadAssetAtPath("Assets/Images/Sun.png", typeof(Sprite)) as Sprite;
+		Sprite planetsprite = Resources.Load<Sprite>("Sun");
 
 		// Set color
 		Color enteredColor;
